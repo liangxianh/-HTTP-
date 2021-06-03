@@ -1,7 +1,7 @@
 ## 了解web及网络基础
 
 ### 使用http协议访问web
-> web使用一种名为HTTP(HyperText Transfer Protocol,超文本传输协议[又名]:(https://www.ituring.com.cn/article/1817))的协议作为规范，完成从客户端到服务端等一系列运作流程；
+> web使用一种名为HTTP(HyperText Transfer Protocol,超文本传输协议[又名]:(https://www.ituring.com.cn/article/1817) ) 的协议作为规范，完成从客户端到服务端等一系列运作流程；
 
 ### http诞生
 > 为知识共享而规划web。最初理念：借助多文档之间相互关联形成超文本（HyperText）,连成可相互参阅的WWW（World Wide Web，万维网）。
