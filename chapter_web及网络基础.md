@@ -18,19 +18,24 @@
   4. 链路层：用来处理链接网络的硬件部分，包括操作系统，硬件的的设备驱动,NIC（Network Interface Card网卡）
 
 > TCP/IP通信传输流
-
+>
                      客户端                        服务端
      应用层   &darr; HTTP客户端                     HTTP  &harr;
      传输层   &darr; Tcp                           TCP   &harr;
      网络层   &darr; IP                            IP    &harr;
      链路层   &darr; 网络                          网络   &harr;
+     
   1. 应用层http协议发出http请求
   2. 传输层从应用层获得的数据(http报文)打标记及端口号
   3. 网络层增加作为通信目的地的MAC地址后转发给链路层
   4. 接收端服务器在链路层接收到数据，按序往上层发送
 
 
-
+### 与HTTP关系密切的协议IP TCP DNS
+> 负责传输的IP协议（Internet protocol）
+  > IP协议的作用是把各种数据包传递给对方，要保证能够确实传递给对方需要IP地址和MAC地址（Media Access Control Address）；IP地址指明了节点被分配到的地址，MAC地址是指网卡所属的固定地址；量地址可以进行配对，IP地址可变化，但是MAC地址基本不会更改
+> 确保可靠性的TCP协议
+> 负责域名解析的DNS
 
 
 
