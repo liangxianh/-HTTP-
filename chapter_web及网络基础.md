@@ -18,12 +18,12 @@
   4. 链路层：用来处理链接网络的硬件部分，包括操作系统，硬件的的设备驱动,NIC（Network Interface Card网卡）
 
 > TCP/IP通信传输流
->
-                     客户端                        服务端
-     应用层   &darr; HTTP客户端                     HTTP  &harr;
-     传输层   &darr; Tcp                           TCP   &harr;
-     网络层   &darr; IP                            IP    &harr;
-     链路层   &darr; 网络                          网络   &harr;
+> 
+              客户端                         服务端
+     应用层   HTTP客户端                      HTTP  
+     传输层   Tcp                            TCP   
+     网络层   IP                             IP   
+     链路层   网络                           网络  
      
   1. 应用层http协议发出http请求
   2. 传输层从应用层获得的数据(http报文)打标记及端口号
