@@ -44,33 +44,48 @@
 > 负责域名解析的DNS：DNS服务和http协议一样位于应用层，提供域名到IP地址之间的解析服务（提供通过域名查找IP地址，或者逆向从IP地址反查域名的服务）
 
 ### 各种协议与HTTP协议的关系
-
+```
 客户端（想浏览http://www.baidu.com） 向DNS询问www.baidu.com的ip地址 ----> DNS
 HTTP生成针对目标web服务器的HTTP请求报文（请求http://www.baidu.com） 页面的资源
 TCP将HTTP请求报文分割成报文段，把每个报文段可靠地传递给对方
 IP协议搜索对方的地址，一边中转一边传送
 TCP从对方处接收到报文段，重组
 HTTP对WEB服务器请求的内容处理，了解想要www.baidu.com 的资源，经处理的结果利用TCP/IP通信协议向用户进行回传；
+```
 
 ### URI和URL
 > URL(Uniform Resource Locator，统一资源定位符)及我们web浏览器输入的网址；表示资源的地点
 > URI(Uniform Resource Identifier,统一资源标识符)，URL是URI的子集，用字符串表示某一互联网资源，j就是由某个协议方案表示的资源定位表示符；如下几种：
 ```
-ftp://ftp.is.co.za/rfc/rfc1808.txt
-http://www.ietf.org/rfc/rfc2396.txt
-Idap://[2001:db8::7]/c=GB?objectClass?one
-mailto:John.Doe@example.com
-news:comp.infosystems.www.servers.unix
-tel:+1-816055501212
-telnet://192.0.2.16:80/
+ftp://ftp.is.co.za/rfc/rfc1808.txt (also a URL because of the protocol)
+http://www.ietf.org/rfc/rfc2396.txt (also a URL because of the protocol)
+ldap://[2001:db8::7]/c=GB?objectClass?one (also a URL because of the protocol)
+mailto:John.Doe@example.com (also a URL because of the protocol)
+news:comp.infosystems.www.servers.unix (also a URL because of the protocol)
+tel:+1-816-555-1212
+telnet://192.0.2.16:80/ (also a URL because of the protocol)
 urn:oasis:names:specification:docbook:dtd:xml:4.1.2
+
 file:///~/calendar
+
+   ftp://ftp.is.co.za/rfc/rfc1808.txt
+      --文件传输协议服务的ftp方案
+   gopher://spinaltap.micro.umn.edu/00/Weather/California/Los%20Angeles
+      -- Gopher 和 Gopher+ 协议服务的 gopher 方案
+   http://www.math.uio.no/faq/compression-faq/part1.html
+      -- 超文本传输​​协议服务的http方案
+   邮箱：mduerst@ifi.unizh.ch
+      -- 电子邮件地址的 mailto 方案
+   新闻：comp.infosystems.www.servers.unix
+      -- USENET 新闻组和文章的新闻方案
+   telnet://melvyl.ucop.edu/
+      -- 通过 TELNET 协议进行交互式服务的 telnet 方案
 ```
 ```
 URI格式由URI协议名（例如http、ftp、mailto、file），一个冒号，和协议对应的内容所构成。特定的协议定义了协议内容的语法和语义，而所有的协议都必须遵循一定的URI文法通用规则，亦即为某些专门目的保留部分特殊字符。URI文法同时也就各种原因对协议内容加以其他的限制，例如，保证各种分层协议之间的协同性。百分号编码也为URI提供附加信息。
-URL的格式由下列三部分组成:，第一部分是协议（或称为服务方式）；第二部分是存有该资源的主机IP地址（有时也包括端口号）；第三部分是主机资源的具体地址。
+URL的格式由下列三部分组成:第一部分是协议（或称为服务方式）；第二部分是存有该资源的主机IP地址（有时也包括端口号）；第三部分是主机资源的具体地址。
 具体URI的格式如下：
-[协议名]://[用户名]:[密码]@[服务器地址]:[服务器端口号]/[路径]?[查询字符串]#[片段ID] [4]
+[协议名]://[用户名]:[密码]@[服务器地址]:[服务器端口号]/[路径]?[查询字符串]#[片段ID]
 ```
 
 
