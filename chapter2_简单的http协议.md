@@ -1,16 +1,16 @@
 ## 简单的http协议
 
-> HTTP协议用于在客户端和服务端之间的通信
+1. HTTP协议用于在客户端和服务端之间的通信
 
-> 通过请求和响应的交换达成通信,从客户端开始建立通信，服务端在没有接收到请求之前不会发送响应
-  1. 请求报文包括：请求方法（eg：POST）、请求URI(eg:/form/list)、协议版本(eg:TPPT/1.1)、可选的请求首部字段(eg:HOST:* Connection: keep-alive等)和内容实体（请求参数）
-  2. 响应保本包括：协议版本、状态码（eg： 200）、用于解释状态码的原因短语（eg: ok）、可选的响应首部字段以及实体主体内容
+2. 通过请求和响应的交换达成通信,从客户端开始建立通信，服务端在没有接收到请求之前不会发送响应
+  > 请求报文包括：请求方法（eg：POST）、请求URI(eg:/form/list)、协议版本(eg:TPPT/1.1)、可选的请求首部字段(eg:HOST:* Connection: keep-alive等)和内容实体（请求参数）
+  > 响应保本包括：协议版本、状态码（eg： 200）、用于解释状态码的原因短语（eg: ok）、可选的响应首部字段以及实体主体内容
   
-> HTTP是不保存状态的协议，即http协议自身不对请求和响应之间的通信状态进行保存，对于发送过的请求或响应不做持久化处理；HTTP/1.1虽然无状态，但是为了实现期望的保持状态功能，引入了Cookie技术；
+3. HTTP是不保存状态的协议，即http协议自身不对请求和响应之间的通信状态进行保存，对于发送过的请求或响应不做持久化处理；HTTP/1.1虽然无状态，但是为了实现期望的保持状态功能，引入了Cookie技术；
 
-> 请求URI定位资源，HTTP协议使用URI定位互联网上的资源
+4. 请求URI定位资源，HTTP协议使用URI定位互联网上的资源
 
-> 告知服务器意图的HTTP方法
+5. 告知服务器意图的HTTP方法
 
   |  方法名   | 作用  | 支持的HTTP协议版本 | 详细说明 |
   |  :----:  | :----:  | :----: | :----: |
@@ -25,9 +25,21 @@
   | LINK  | 建立和资源之间的联系 | 1.0 | -- |
   | UNLINK  | 断开连接关系 | 1.0 | -- |
   
-> 使用方法下达命令
+6. 使用方法下达命令
 
-> 持久连接节省通信量，HTTP初版本中没进行一次HTTP通信都要断开一次TCP连接，HTTP/1.1和一份HTTP/1.0想出了持久连接（HTTP Persistent Connections，也称HTTP keep-alive或HTTP connection reuse）；其特点是只要任意一端没有明确提出断开连接，则保持TCP连接状态；
+7. 持久连接节省通信量，HTTP初版本中没进行一次HTTP通信都要断开一次TCP连接，HTTP/1.1和一份HTTP/1.0想出了持久连接（HTTP Persistent Connections，也称HTTP keep-alive或HTTP connection reuse）；其特点是只要任意一端没有明确提出断开连接，则保持TCP连接状态；
 
+8. 管线化，可以使得不用等待上一次的响应亦可直接发送下一个请求，这样可以同时并行发送多个请求
+9. 使用Cookie的状态管理：http是无状态的，为了让服务器记住各个客户端的状态引入了Cookie。Cookie通过在请求和响应报文中写入Cookie信息来控制客户端的状态
+   > a 客户端进行无cookie请求； b 服务器端生成Cookie信息并在响应报文中添加set-cookie； c 再次请求报文里面会自动发送保存着的cookie；我们获取到响应报文的cookie信息也可以使用Cookies.set('KEYNAME', VALUE)形式按照自己的医院去设置存储
+   ```
+   响应报文
+   set-cookie: rememberMe=deleteMe; Path=/dd; Max-Age=0; Expires=Sun, 20-Jun-2021 08:15:42 GMT
+   set-cookie: JSESSIONID=dfasdffdffa2341231234dfAsdf4; Path=/dd; Max-Age=0; Expires=Sun, 20-Jun-2021 08:15:44 GMT
+   
+   请求报文
+   cookie: JSESSIONID=dfasdffdffa2341231234dfAsdf4; experimentation_subject_id=IjBhZjhlMTg0LTc0MjctNDIyYy05M2I1LTFkMzQyMjg1NmI0OCI%3D--dfasdffdffa2341231234dfAsdf4
+   ```
+   
 
 1: 前端缓存那些事:[https://juejin.cn/post/6844904105329033230]
