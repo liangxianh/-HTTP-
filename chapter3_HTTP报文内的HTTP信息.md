@@ -71,16 +71,16 @@ Range: bytes=0-3000， 5000-7000
 
 6. 内容协商返回最合适的内容：eg浏览器默认语言为英文或中文，访问相同的URI的web页面时，则会显示对应的英文版或中文版的web页面，这样的机制称为内容协商
 > 内容协商机制是指客户端和服务端就响应资源内容进行交涉，然后提供给客户端最为适合的资源。会以语言、字符集、编码方式等为基准判断响应的资源。包含请求报文中的某些首部字段，如下：
-1. Accept
-2. Accept-Charset
-3. Accept-Encoding
-4. Accept-Language
-5. Content-Language
+* Accept
+* Accept-Charset
+* Accept-Encoding
+* Accept-Language
+* Content-Language
 
 > 内容协商技术有以下3种类型
-1. 服务器驱动协商（Server-driven Negotiation）：以请求的首部字段为参考，服务端自动处理，不一定能筛选出最优的内容。
-2. 客户端驱动协商（Agent-driven Negotiation）：用户从浏览器显示的可选列表中手动选择，还可以利用js脚本在web页面上自动进行上述选择；比如按浏览器的类型或os的类型自行切换成pc版页面或手机版页面
-3. 透明协商（Transparent Negotiation）：是服务器和客户端各自进行内容协商的一种方法；
+* 服务器驱动协商（Server-driven Negotiation）：以请求的首部字段为参考，服务端自动处理，不一定能筛选出最优的内容。
+* 客户端驱动协商（Agent-driven Negotiation）：用户从浏览器显示的可选列表中手动选择，还可以利用js脚本在web页面上自动进行上述选择；比如按浏览器的类型或os的类型自行切换成pc版页面或手机版页面
+* 透明协商（Transparent Negotiation）：是服务器和客户端各自进行内容协商的一种方法；
 
 
 
