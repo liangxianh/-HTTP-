@@ -33,7 +33,7 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 1. 通用首部字段
 
 |  首部字段名   |  说明    |
-|      :-      |    -:    |
+|      :-      |    :-   |
 |Cache-Control | 控制缓存的行为 |
 |Connection | 逐跳首部、连接的管理|
 |Date      | 创建报文的日期时间 |
@@ -47,7 +47,7 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 2. 请求首部字段
 
 |  首部字段名   |  说明    |
-|      :-      |    -:    |
+|      :-      |    :-    |
 |Accept | 用户代理可处理的媒体类型 |
 |Accept-Charset | 优先的字符集 |
 |Accept-Encoding  | 优先的内容编码 |
@@ -71,31 +71,28 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 3. 响应首部字段
 
 |  首部字段名   |  说明    |
-|      :-      |    -:    |
-|Accept-Ranges | cde|
-|Age | cde|
-|ETag  | |
-|Location  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
+|      :-      |    :-    |
+|Accept-Ranges | 是否接受字节范围请求 |
+|Age | 推算资源创建经过时间 |
+|ETag  | 资源的匹配信息 |
+|Location  | 令客户端重定向至指定的URI |
+|Proxy-Authorization  | 代理服务器对客户端的认证信息 |
+|Retry-After  | 对再次发起请求的时机要求 |
+|Server  | HTTP服务的安装信息 |
+|Vary  | 代理服务器缓存的管理信息 |
+|WWW-Authenticate  | 服务器对客户端的认证信息 |
 
 4. 实体首部字段
 
 |  首部字段名   |  说明    |
-|      :-      |    -:    |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
-|  | |
+|      :-      |    :-    |
+|Allow  | 资源可支持的HTTP方法 |
+|Content-Encodng  | 实体主体的使用的编码方式 |
+|Content-Language  | 实体主体的自然语言 |
+|Content-Length  | 实体主体的大小（单位：字节） |
+|Content-Location  | 替代对应资源的URI |
+|Content-MD5  | 实体主体的报文摘要 |
+|Content-Range  | 实体主体的位置范围|
+|Content-Type  | 实体主体的媒体类型 |
+|Expires  | 实体主体过期的日期时间 |
+|Last-Modified  | 资源的最后修改日期时间 |
