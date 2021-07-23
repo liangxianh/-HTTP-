@@ -96,3 +96,12 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 |Content-Type  | 实体主体的媒体类型 |
 |Expires  | 实体主体过期的日期时间 |
 |Last-Modified  | 资源的最后修改日期时间 |
+
+5. 非HTTP/1.1首部字段
+除了这47种首部字段，还有Cookie、Set-Cookie和Content-Disposition等
+
+6. End-to-end首部和Hop-by-hop首部
+HTTP首部字段将定义成缓存代理和非缓存代理的行为，分成两种类型
+* End-to-end Header端到端首部
+* Hop-by-hop Header逐跳首部
+
