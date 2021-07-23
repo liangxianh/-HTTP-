@@ -16,7 +16,7 @@ Server: Apache
 Etag: '3234-34a-2342343'
 ```
 
-#### 1 HTTP 首部字段
+#### 2 HTTP 首部字段
 HTTP首部字段传递重要信息，可以提供报文主体大小，所使用的语言，认证信息等
 * 格式
  > 字段名: 字段值(可以是多个值用,号隔开) eg Content-Type: text/html； Keep-Alive: timeout=15，max=100；
