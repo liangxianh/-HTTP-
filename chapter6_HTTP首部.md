@@ -102,6 +102,31 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 
 6. End-to-end首部和Hop-by-hop首部
 HTTP首部字段将定义成缓存代理和非缓存代理的行为，分成两种类型
-* End-to-end Header端到端首部
-* Hop-by-hop Header逐跳首部
+* End-to-end Header端到端首部：会转发给请求/响应对应的最终接收目标，且必须保存在由缓存生成的响应中，另外规定他必须转发；
+* Hop-by-hop Header逐跳首部：只对单次转发有效，会因通过缓存或代理而不再转发；HTTP/1.1和之后的版本，若要使用hopbyhop首部，需要提供connection首部字段；
+
+下面列举http/1.1中的逐跳首部，除了这8个首部字段外，其他所有字段都属于端到端首部
+    1. Connection
+    2. Keep-Alive
+    3. Proxy-Authenticate
+    4. Proxy-Authorization
+    5. Trailer
+    6. TE
+    7. Transfer-Encoding
+    8. Upgrade
+
+
+#### 3 HTTP/1.1 通用首部字段
+
+1 Cache-Control
+
+
+
+
+
+
+
+
+
+
 
