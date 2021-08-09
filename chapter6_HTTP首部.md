@@ -119,7 +119,7 @@ HTTP首部字段将定义成缓存代理和非缓存代理的行为，分成两�
 
 #### 3 HTTP/1.1 通用首部字段
 
-1 Cache-Control：可用于请求和响应，多个指令之间用，号隔开;可以详见mdn[https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control ]
+1 Cache-Control：可用于请求和响应，多个指令之间用，号隔开;可以详见[mdn](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 * 缓存请求指令
 
 |  首部字段名    |   参数   |    说明    |
