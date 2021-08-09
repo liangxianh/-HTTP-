@@ -199,9 +199,31 @@ cache-control：only-if-cached表示客户端仅在缓存服务器本地缓存�
 + 该指令要求缓存服务器不重新加载响应，也不会再次确认资源的有效性；
 + 若发生请求缓存服务器的本地缓存无响应，则状态码504Gate Timeout;
 
+```
+cache-control：must-revalidate 代理会向源服务器再次验证即将返回的响应缓存目前是否仍然有效；
+```
++ 如果代理无法连通源服务器再次获取有效资源的话缓存必须给客户端一条504状态码；
++ 使用must-revalidate指令会忽略请求的max-stale指令；
+
+```
+cache-control：proxy-revalidate 该指令要求所有缓存服务器在接收到客户端带有该指令的请求返回响应之前，必须再次验证缓存的有效性；
+```
+
+```
+cache-control：no-transform 该指令规定无论在请求还是响应中，缓存都不能改变实体主体的媒体类型；
+```
++ **这样做可以防止缓存或者代理压缩图片等类似的操作**
+
+**Cache-Control扩展**
+**cache-extension token**
+```
+Cache-Control:private, community="UTC". cache-extension标记token，可以扩展Cache-Control首部字段内的指令；
+```
++ Cache-Control首部字段本身没有community这个指令；借助extension tokens实现了该指令的添加，如果缓存服务器不理解community这个新指令，就会直接忽略；因此，extension tokens仅对能理解它的缓存服务器来说是有意义的；
+
+2 Connection 首部字段具备如下两个作用；
+* 控制不在转发给代理的首部字段；
 
 
-
-
-
+* 管理持久连接
 
