@@ -224,8 +224,47 @@ Cache-Control:private, community="UTC". cache-extension标记token，可以扩�
 2 Connection 首部字段具备如下两个作用；
 * 控制不在转发给代理的首部字段；
 
+```
+GET / HTTP/1.1
+Upgrade: / HTTP/1.1
+Connection: Upgrade(此处是不在转发的首部字段名)
+```
+将Upgrade这个首部字段删除后在进行转发，经过代理转发后，在服务端收到的将是:
+```
+GET / HTTP/1.1
+```
 
 * 管理持久连接
+```
+Connection: close
+```
+HTTP/1.1版本的默认连接是持久化的，当服务端想明确断开连接时则指定Connection首部字段的值为close
 
+```
+Connection: Keep-Alive
+```
+HTTP/1.1之前的HTTP版本的默认连接都是非持久化的；想在就版本的HTTP协议上维持持续连接，则需要指定Connection首部字段的值为Keep-Alive
 
+```
+客户端发送如下请求：
+GET / HTTP/1.1
+Connection: Keep-Alive
+
+服务端会加上Keep-Alive和Connection这两个首部字段，返回如下：
+HTTP/1.1 200 OK
+...
+Keep-Alive: timeout=0, max=500
+Connection: Keep-Alive
+...
+```
+
+3 Date表明创建HTTP报文的日期和时间
+```
+在响应报文中：
+date: Thu, 12 Aug 2021 08:49:12 GMT
+```
+响应date有个作用是可以判断是否是缓存：
+HTTP没有为用户提供一种手段来区分响应是缓存命中的，还是访问原始服务器得到的,参考(文章)[https://www.cnblogs.com/saolv/p/7828529.html]
+> 客户端有一种方法能判断响应是否来自缓存，就是使用**Date首部**。将响应中Date首部的值与当前时间进行比较，如果响应中的日期值比较早，客户端通常就可以认为是来自缓存的；
+> 客户端也可以通过**Age首部**来检测缓存的响应，通过这个首部可以分辨出这条响应的使用期。否则，则认为是来自原始服务器中的。Age 消息头里包含对象在缓存代理中存贮的时长，以秒为单位。Age的值通常接近于0。表示此对象刚刚从原始服务器获取不久；其他的值则是表示代理服务器当前的系统时间与此应答中的通用头 Date 的值之差。
 
