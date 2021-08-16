@@ -356,22 +356,103 @@ warning: 113 gw.hackr.jp:8080 "Heuristic expiration" Mon, 16 Aug 2021 07:26:47 G
 
 #### 4 请求首部字段
 
-1. Accept 用户代理可处理的媒体类型
-2. Accept-Charset 优先的字符集
-3. Accept-Encoding  优先的内容编码
-4. Accept-Language  优先的语言
-5. Authorization  Web认证信息|
-6. Expect  期待服务器的特定行为
-7. Form  用户的电子邮箱地址
-8. Host  请求资源所在服务器
-9. If-Match  比较实体标记（Etag）|
+1. Accept通知服务器，用户代理可处理的媒体类型及媒体类型相对优先级
+```
+accept：text/plain；q=0.3，text/html //那份资源最后给我html的，如果没有给我text的也可以
+accept：类型1；类型1对应的优先级q（0～1，1权重最高，默认为1.0，可精确到小数点后3位），类型2；类型2的优先级
+在eg：在网站https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Warning发现一个doc资源如下：
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+```
+下面列举几种媒体类型
+* 文本文件
+```
+text/html, text/plain,text/css...
+application/xhtml+xml,application/xml...
+```
+* 图片文件
+```
+image/jpeg,image/gif,image/png...
+```
+* 视频文件
+```
+video/mpeg,video/quicktime...
+```
+* 应用程序使用的二进制文件
+```
+application/octet-stream,application/zip...
+```
+
+2. Accept-Charset 通知服务器，用户代理支持的的字符集及字符集相对优先顺序
+```
+accpet-charset:iso-8859-5,unicode-1-1;q=0.8
+```
+
+3. Accept-Encoding 通知服务器，用户代理支持的的内容编码及内容编码优先顺序,可一次性指定多种；可以使用q设置优先级，也可以使用 * 通配符指定任意编码格式
+```
+accpet-Encoding:gzip,deflate
+```
+下面列举几种内容编码
+* gzip：由文件压缩程序gzip生成编码格式（RFC1952），采用lempei-ziv（lz77）算法及32位循环冗余校验（cyclic redundancy check，通称CRC）
+* compress:由UNIX文件压缩程序compress生成的编码格式，采用lempel-ziv-welch算法（lzw）
+* deflate：组合使用zlib格式及由deflate压缩算法生成的编码格式 
+* identity：不执行压缩或不会变化默认的编码格式 
+* br：表示采用 Brotli 算法的编码方式 
+
+4. Accept-Language 通知服务器，用户代理可处理的自然语言集及自然语言集相对优先级
+```
+accpet-Language:zh-cn，zh；q=0.7，en-us，en;q=0.3
+```
+
+5. Authorization 告知服务器用户代理的认证信息
+当去请求资源时，有时会返回401 Unauthorized，当客户端接收到该状态码响应时，会将首部字段Authorization加入请求中，共用缓存在接收到含有Authorization的请求时操作处理会有差异；
+
+6. Expect 告知服务器，期待服务器的特定行为；
+目前规范中只规定了 "100-continue" 这一个期望条件
+```
+Expect: 100-continue //通知接收方客户端要发送一个体积可能很大的消息体，期望收到状态码为100 (Continue)  的临时回复。因服务器无法理解c端的期望做出回应而发生错误时，会返回417 Expectation Failed
+```
+* 100 如果消息头中的期望条件可以得到满足，使得请求可以顺利进行的话，
+* 417 (Expectation Failed) 如果服务器不能满足期望条件的话；也可以是其他任意表示客户端错误的状态码（4xx）。
+
+7. Form 告知服务器使用用户代理的用户的电子邮箱地址（如果有事请联系这个电子邮箱）
+使用代理时应尽可能的包含from首部，但可能会因为代理的不同，将电子邮件的地址记录在User-Agent首部里；
+
+8. Host  告知服务器，请求资源所在服务器主机名和端口号
+```
+host: www.hackr.jp
+```
+* 如果没有包含端口号，会自动使用被请求服务的默认端口（比如HTTPS URL使用443端口，HTTP URL使用80端口）。
+* 在http/1。1规范中唯一一个必须被包含在请求内的首部字段，对于缺少Host头或者含有超过一个Host头的HTTP/1.1 请求，可能会收到400（Bad Request）状态码。
+* 当相同的ip地址下部署运行多个域名，就需要host来明确指出请求的主机名；若服务器未设置主机名直接发送一个空值即可
+
+？？？但是我们平时做web开发时发起请求并没有指定host啊？？？？web开发过程中如何设置请求头host
+？？？是通过devserver的proxy target指定的么？
+？？？或者可以利用nginx的代理转发指定的
+```
+   #接口
+   location /apiroute/ {
+      proxy_pass  http://www.***.com/apiroute/;
+   }
+```
+
+9. If-Match  比较实体标记（Etag）
+
 10. If-Modified-Since  比较资源的更新时间
-11. If-None-Match  比较实体标记 （与If-Match相反）|
+
+11. If-None-Match  比较实体标记 （与If-Match相反）
+
 12. If-Range  资源未更新时发送实体Byte的范围请求
+
 13. If-Unmodified-Since  比较资源的更新时间(与If-Modified-Since相反)
+
 14. Max-Forwards  最大传输逐跳数
+
 15. Proxy-Authorization  代理服务器要求客户端的认证信息
+
 16. Range  字体的字节范围请求
+
 17. Referer  对请求中URI的原始获取方
+
 18. TE  传输编码的优先级
+
 19. User-Agent  HTTP客户端程序的信息
