@@ -270,7 +270,6 @@ HTTP没有为用户提供一种手段来区分响应是缓存命中的，还是�
 
 > 客户端也可以通过**Age首部**来检测缓存的响应，通过这个首部可以分辨出这条响应的使用期。否则，则认为是来自原始服务器中的。Age 消息头里包含对象在缓存代理中存贮的时长，以秒为单位。Age的值通常接近于0。表示此对象刚刚从原始服务器获取不久；其他的值则是表示代理服务器当前的系统时间与此应答中的通用头 Date 的值之差。
 <font color='red'> (应该date的值加上age的值等于现在的时间,但是看了很多网站和资源都不是这样，有大神路过可以指点一下么？？？) </font>
-<font color='red'> dadadadadadadadas</font>
 
 4 Pragma是HTTP/1.1之前版本历史遗留字段，仅作为与HTTP/1.0的向后兼容而定义
 ```
@@ -318,7 +317,21 @@ cf0  // 16进制（转换为10进制为3312）
 
 7 Upgrade用于检测http协议及其他协议时候可使用更高的版本进行通信，其参数值可以指定一个完全不同的通信协议；
 ```
+request
+GET /index.htm HTTP/1.1
+Upgrade：TSL/1.0
+Connection：Upgrade   //Connection字段被指定为Upgrade了，产生作用仅限于客户端和临近的服务器之间，
+
+Response
+HTTP/1.1 101 Switching Protocols
+Upgrade：TSL/1.0，HTTP/1.1
+Connection：Upgrade
 
 ```
+> Note: Connection: upgrade must be set whenever Upgrade is sent.
 
+8 via 为了追踪client和server之间的请求和响应报文的传输路径
+```
+via: 1.1 fae59a141259f8fbe249f8056c44162e.cloudfront.net (CloudFront) //其中1.1代表接收请求的服务器上应用的HTTP协议版本；
+```
 
