@@ -40,9 +40,9 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 |Pragma | 报文指令 |
 |Trailer | 报文末端的首部一览 |
 |Transfer-Encoding  | 指定报文主体的传输编码方式 |
-|Upgrade | 升级为其他协议|
-|Via  | 代理服务器相关信息 |
-|Warning  | 错误通知 |
+|Upgrade | 检测是否可以使用其他协议|
+|Via  | 代理服务器相关信息，为了追踪传输路径，经常和TRACE方法一起使用 |
+|Warning  | 告知用户一些与缓存相关的问题的警告 |
 
 2. 请求首部字段
 
@@ -335,3 +335,43 @@ Connection：Upgrade
 via: 1.1 fae59a141259f8fbe249f8056c44162e.cloudfront.net (CloudFront) //其中1.1代表接收请求的服务器上应用的HTTP协议版本；
 ```
 
+9 warning 属于http/1.1 是从http/1.0的响应首部retry-after演变而来，告知用户与缓存相关的问题的警告；
+```
+格式：
+warning：[警告码][警告的主机：端口号]”[警告内容]“([日期时间])
+eg：
+warning: 113 gw.hackr.jp:8080 "Heuristic expiration" Mon, 16 Aug 2021 07:26:47 GMT
+```
+> HTTP/1.1 定义了7中警告码，的警告码
+|  警告码 |   警告内容  |    说明    |
+|  :-    |    :-    |   :-      |
+|110     | Response is stale(响应已过期)   | 代理返回已过期的资源  |
+|111     | Revalidation failed(再验证失败) | 代理再次验证有效性时失败（服务器无法到达等原因）  |
+|112     | Disconnection operation(断开连接操作) | 代理与互联网连接估计切断 |
+|113     | Heuristic expiration(试探性过期) | 如果缓存服务器采用启发式方法，将缓存的有效时间设定为24小时，而在该响应的age超过24小时发送 |
+|199     | Miscellaneous Warning(杂项警告)  | 任意的、未明确指定的警告信息  |
+|214     | Transformation Applied(使用了转换) | 由代理服务器添加，如果它对返回的展现内容进行了任何转换，比如改变了内容编码、媒体类型等  |
+|299     | Miscellaneous Warning(持久杂项警告) | 与199类似，只不过指代的是持久化警告 |
+
+
+#### 4 请求首部字段
+
+1. Accept 用户代理可处理的媒体类型
+2. Accept-Charset 优先的字符集
+3. Accept-Encoding  优先的内容编码
+4. Accept-Language  优先的语言
+5. Authorization  Web认证信息|
+6. Expect  期待服务器的特定行为
+7. Form  用户的电子邮箱地址
+8. Host  请求资源所在服务器
+9. If-Match  比较实体标记（Etag）|
+10. If-Modified-Since  比较资源的更新时间
+11. If-None-Match  比较实体标记 （与If-Match相反）|
+12. If-Range  资源未更新时发送实体Byte的范围请求
+13. If-Unmodified-Since  比较资源的更新时间(与If-Modified-Since相反)
+14. Max-Forwards  最大传输逐跳数
+15. Proxy-Authorization  代理服务器要求客户端的认证信息
+16. Range  字体的字节范围请求
+17. Referer  对请求中URI的原始获取方
+18. TE  传输编码的优先级
+19. User-Agent  HTTP客户端程序的信息
