@@ -103,7 +103,7 @@ HTTP首部字段传递重要信息，可以提供报文主体大小，所使用�
 6. End-to-end首部和Hop-by-hop首部
 HTTP首部字段将定义成缓存代理和非缓存代理的行为，分成两种类型
 * End-to-end Header端到端首部：会转发给请求/响应对应的最终接收目标，且必须保存在由缓存生成的响应中，另外规定他必须转发；
-* Hop-by-hop Header逐跳首部：只对单次转发有效，会因通过缓存或代理而不再转发；HTTP/1.1和之后的版本，若要使用hopbyhop首部，需要提供connection首部字段；
+* Hop-by-hop Header逐跳首部：只对单次转发有效，会因通过缓存或代理而不再转发；HTTP/1.1和之后的版本，若要使用hop-by-hop首部，需要提供connection首部字段；
 
 下面列举http/1.1中的逐跳首部，除了这8个首部字段外，其他所有字段都属于端到端首部
 
@@ -260,7 +260,7 @@ Connection: Keep-Alive
 
 3 Date表明创建HTTP报文的日期和时间
 ```
-在响应报文中：
+在响应报文中，格式如下（RFC1123）：
 date: Thu, 12 Aug 2021 08:49:12 GMT
 ```
 响应date有个作用是可以判断是否是缓存：
@@ -269,5 +269,56 @@ HTTP没有为用户提供一种手段来区分响应是缓存命中的，还是�
 > 客户端有一种方法能判断响应是否来自缓存，就是使用**Date首部**。将响应中Date首部的值与当前时间进行比较，如果响应中的日期值比较早，客户端通常就可以认为是来自缓存的；
 
 > 客户端也可以通过**Age首部**来检测缓存的响应，通过这个首部可以分辨出这条响应的使用期。否则，则认为是来自原始服务器中的。Age 消息头里包含对象在缓存代理中存贮的时长，以秒为单位。Age的值通常接近于0。表示此对象刚刚从原始服务器获取不久；其他的值则是表示代理服务器当前的系统时间与此应答中的通用头 Date 的值之差。
-<font color="red">(应该date的值加上age的值等于现在的时间,但是看了很多网站和资源都不是这样，有大神路过可以指点一下么</font>)
+<font color='red'> (应该date的值加上age的值等于现在的时间,但是看了很多网站和资源都不是这样，有大神路过可以指点一下么？？？) </font>
+<font color='red'> dadadadadadadadas</font>
+
+4 Pragma是HTTP/1.1之前版本历史遗留字段，仅作为与HTTP/1.0的向后兼容而定义
+```
+Pragma: no-catch;通用首部字段，仅用于客户端发送的请求中；no-cache 与 Cache-Control: no-cache 效果一致。强制要求缓存服务器在返回缓存的版本之前将请求提交到源头服务器进行验证
+```
+> 因为不保证所有中间服务器都能一HTTP/1.1为基准，有可能存在HTTP/1.0及以下，故发送请求时一般同时含有下么两个首部
+```
+Cache-Control: no-catch
+Pragma：no-cache
+```
+
+5 Trailer事先说明在报文主体后记录了哪些首部字段，是一个响应首部，允许发送方在分块发送的消息后面添加额外的元信息，这些元信息可能是随着消息主体的发送动态生成的，比如消息的完整性校验，消息的数字签名，或者消息经过处理之后的最终状态等。提醒客户端在报文的最后写了很多重要的东西记得要仔细阅读；
+```
+HTTP/1.1 200 OK
+Date：Thu, 12 Sep 2021 08:49:12 GMT
+Content-Type：text/html
+...
+Transfer-Encoding：chunked
+Trailer：Expires
+
+...报文主体...
+0 
+Expires: Tue, 28 Sep 2021 23:59:59 GMT //Expires 首部出现在分块信息的结尾，作为挂载（trailer）首部
+```
+
+6 Transfer-Encoding规定传输报文主体时采用的编码方式；是一个逐跳传输消息首部；一个多节点连接中的每一段都可以应用不同的Transfer-Encoding 值；如果你想要将压缩后的数据应用于整个连接，那么请使用端到端传输消息首部  Content-Encoding；当这个消息首部出现在 HEAD 请求的响应中，而这样的响应没有消息体，那么它其实指的是应用在相应的  GET 请求的应答的值。
+```
+HTTP/1.1 200 OK
+date: Mon, 16 Aug 2021 03:43:30 GMT
+ache-control: no-cache, no-store, must-revalidate
+content-type: text/plain
+expires: Fri, 01 Jan 1990 00:00:00 GMT
+content-Encoding: gzip
+Transfer-Encoding: chunked
+connection: keep-alive
+cf0  // 16进制（转换为10进制为3312）
+
+...3312字节分块数据...
+
+392 // 16进制（转换为10进制为914）
+...914字节分块数据...
+
+0
+```
+
+7 Upgrade用于检测http协议及其他协议时候可使用更高的版本进行通信，其参数值可以指定一个完全不同的通信协议；
+```
+
+```
+
 
