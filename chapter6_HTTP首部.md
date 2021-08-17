@@ -515,14 +515,39 @@ Etag=“67890”
 
 13. If-Unmodified-Since 告知服务器只有在If-Unmodified-Since值指定的时间日期之后，未发生资源更新情况下，才能处理该请求(与If-Modified-Since相反)；若在指定时间内发生了更新则返回412 Precondition Failed 
 
-14. Max-Forwards  最大传输逐跳数
+14. Max-Forwards 最大传输逐跳数，通过TRANCE或OPTIONS方法，发送含有max-forwards的请求，该字段以十进制证书形式指定可经过的服务器最大数目；服务器在往下一个服务器转发请求前将值-1重新赋值，当服务器收到max-forwards值为0的请求时，则不在进行转发，而是直接返回响应；使用http协议通信时，可能会进过代理等多台服务器，途中若代理服务器由于某些原因导致请求失败，客户端将等不到服务器的响应；因当值为0时，服务器立即返回响应；可以利用此来对那台问题服务器为终点的传输路径的通信状态有所把握；
+> max-forwards 大于转发代理服务器个数时怎么处理????
 
-15. Proxy-Authorization  代理服务器要求客户端的认证信息
 
-16. Range  字体的字节范围请求
+15. Proxy-Authorization 接受到从代理服务器发来的认证质询时，客户端会发送包含首部字段proxy-authorization的请求，以告知服务器认证所需要的信息；这个首部通常是在服务器返回了 407 Proxy Authentication Required 响应状态码及 Proxy-Authenticate 首部后发送的。认证行为发生在客户端和代理之间；客户端和服务器之间的认证使用authrization即可；
 
-17. Referer  对请求中URI的原始获取方
+16. Range 对于只需要获取部分资源的范围请求，包含首部字段染革即可告知服务器资源的指定范围
+ ```
+ range: bytes=5001-10000
+ 
+ response
+ // 会处理
+ 206 partial content
+ 
+ //无法处理时
+ 200 ok 及全部资源
+ ```
 
-18. TE  传输编码的优先级
+17. Referer 告知服务器请求的原始资源的URI,请求头包含了当前请求页面的来源页面的地址，即表示当前页面是通过此来源页面里的链接进入的。服务端一般使用 Referer 请求头识别访问来源，可能会以此进行统计分析、日志记录以及缓存优化等。
+```
+Referer: https://www.baidu.com/?tn=62095104_19_oem_dg
+```
 
-19. User-Agent  HTTP客户端程序的信息
+18. TE 告知服务器客户端能够处理的响应的**传输编码**方式及相对优先级;同Accept-Encoding（用于内容编码）相似；
+```
+TE: gzip, deflate;q=0.5
+
+TE: trailers //表示客户端期望在采用分块传输编码的响应中接收挂载字段。
+```
+
+19. User-Agent 会将创建请求的浏览器和用户代理名称等信息传达给服务器（HTTP客户端程序的信息）；不同浏览器及爬虫和机器人的ua内容不一致详见[mdn](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/User-Agent)
+```
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36
+```
+
+#### 5 响应首部字段
