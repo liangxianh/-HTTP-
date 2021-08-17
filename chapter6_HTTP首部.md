@@ -494,9 +494,26 @@ content-length:5000
 //当服务器有index.html资源时，但是Etag=67890不一致时 将返回全部内容
 200 OK
 Etag=“67890”
+
+当请求不使用if-range时，则需要两次处理
+Request 
+GET /index.html
+If-Match: “12345”
+Range：bytes=5001-10000
+
+Response
+//如果服务器的资源更新，那客户端持有的资源中的一部分也会随之无效，范围请求作为前提是无效的
+412 Precondition Failed //你要的部分资源已经没有了，你重新在发送一个请求吧；这样与使用if-range比，就需要花费两倍的功夫；
+
+Request
+GET /
+Response
+200 OK
+Etag=“67890”
+
 ```
 
-13. If-Unmodified-Since  比较资源的更新时间(与If-Modified-Since相反)
+13. If-Unmodified-Since 告知服务器只有在If-Unmodified-Since值指定的时间日期之后，未发生资源更新情况下，才能处理该请求(与If-Modified-Since相反)；若在指定时间内发生了更新则返回412 Precondition Failed 
 
 14. Max-Forwards  最大传输逐跳数
 
