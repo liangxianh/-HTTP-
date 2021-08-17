@@ -328,6 +328,8 @@ Upgrade：TSL/1.0，HTTP/1.1
 Connection：Upgrade
 
 ```
+一个很好的应用实例，利用upgrade实现websocket的连接，详见[文章一：websocket服务器怎么向客户端推送消息？](https://blog.csdn.net/weixin_39608988/article/details/111102328) [文章2:简单聊聊 WebSocket](https://blog.csdn.net/weixin_39939303/article/details/111164090)
+
 > Note: Connection: upgrade must be set whenever Upgrade is sent.
 
 8 via 为了追踪client和server之间的请求和响应报文的传输路径
@@ -419,7 +421,7 @@ Expect: 100-continue //通知接收方客户端要发送一个体积可能很大
 
 8. Host  告知服务器，请求资源所在服务器主机名和端口号
 ```
-host: www.hackr.jp
+host: www.hackr.jp //一个域名指向一个ip和对应的端口号
 ```
 * 如果没有包含端口号，会自动使用被请求服务的默认端口（比如HTTPS URL使用443端口，HTTP URL使用80端口）。
 * 在http/1。1规范中唯一一个必须被包含在请求内的首部字段，对于缺少Host头或者含有超过一个Host头的HTTP/1.1 请求，可能会收到400（Bad Request）状态码。
@@ -427,7 +429,7 @@ host: www.hackr.jp
 
 ？？？但是我们平时做web开发时发起请求并没有指定host啊？？？？web开发过程中如何设置请求头host
 ？？？是通过devserver的proxy target指定的么？
-？？？或者可以利用nginx的代理转发指定的
+？？？或者可以利用nginx的代理转发指定的？
 ```
    #接口
    location /apiroute/ {
@@ -435,13 +437,64 @@ host: www.hackr.jp
    }
 ```
 
-9. If-Match  比较实体标记（Etag）
+**形如If-xxx这种样式的请求首部字段，都可称为条件请求。服务器接收到附加条件请求后，只有判断指定条件为真时才会执行请求；**
 
-10. If-Modified-Since  比较资源的更新时间
+9. If-Match If-match告知服务器匹配资源所用的实体标记Etag，当请求的If-Match值和服务器的资源的实体标记（Etag）值一致时才会执行请求，；否则返回412 Precondition Failed的响应；当值为 * 号时，服务器会忽略Etag的值；
+```
+Request 
+GET /index.html
+If-Match: "12345"
 
-11. If-None-Match  比较实体标记 （与If-Match相反）
+Response
+//当服务器资源是 index.html 实体标记（Etag）为12345时  // 实体标记（Etag）是与特定资源关联的确定值，资源跟新后Etag也会随之更新；
+200 OK
 
-12. If-Range  资源未更新时发送实体Byte的范围请求
+//当服务器资源是 index.html 实体标记（Etag）为567890时
+412 Precondition Failed
+```
+
+10. If-Modified-Since 告知服务器若If-Modified-Since时间早于资源更新时间，则希望能处理该请求；**用于确认代理或客户端拥有本地资源的有效性**
+```
+GET /index.htm
+If-Modified-Since:Tue, 17 Aug 2021 09:07:44 GMT
+
+//对服务器，因为是21年8月17之后更新过的资源所以我可以接受
+200 OK
+Last-Modified：Tue, 19 Aug 2021 09:07:44 GMT
+
+//对服务器，因为在21年8月17之后未更新过，所以不能接受返回304
+304 Not Modified
+Last-Modified：Tue, 19 Aug 2021 09:07:44 GMT
+```
+
+11. If-None-Match 只有在If-None-Match值与实体标记（Etag）值不一致时，可以处理该请求 （与If-Match相反）；**在GET或HEAD方法中使用可以获取最新的资源**；
+```
+Request 
+GET /sample.html
+If-None-Match: *
+
+Response
+//当服务器没有sample.html资源时，也就没有对应的Etag故可以处理你的请求
+200 OK
+```
+
+12. If-Range 告知服务器若指定的If-Range字段值（ETag或者时间）和请求资源的Etag值或者时间一致时，则作为范围请求处理；反之则返回全体资源；
+```
+Request 
+GET /index.html
+If-Range: “12345”
+Range：bytes=5001-10000
+
+Response
+//当服务器有index.html资源时，且Etag=12345 将返回范围内容
+206 Partial Content
+content-range：bytes 5001-10000/10000
+content-length:5000
+
+//当服务器有index.html资源时，但是Etag=67890不一致时 将返回全部内容
+200 OK
+Etag=“67890”
+```
 
 13. If-Unmodified-Since  比较资源的更新时间(与If-Modified-Since相反)
 
