@@ -2,7 +2,7 @@
 
 HTTP协议的请求和响应报文中必定包含HTTP首部；
 
-#### 1 HTTP 报文首部
+#### 一 HTTP 报文首部
 * 请求报文首部：包括方法、URI、HTTP版本、HTTP首部字段
 ```
 GET / HTTP/1.1
@@ -16,7 +16,7 @@ Server: Apache
 Etag: '3234-34a-2342343'
 ```
 
-#### 2 HTTP 首部字段
+#### 二 HTTP 首部字段
 HTTP首部字段传递重要信息，可以提供报文主体大小，所使用的语言，认证信息等
 * 格式
  > 字段名: 字段值(可以是多个值用,号隔开) eg Content-Type: text/html； Keep-Alive: timeout=15，max=100；
@@ -117,7 +117,7 @@ HTTP首部字段将定义成缓存代理和非缓存代理的行为，分成两�
     8. Upgrade
 
 
-#### 3 HTTP/1.1 通用首部字段
+#### 三 HTTP/1.1 通用首部字段
 
 1 Cache-Control：可用于请求和响应，多个指令之间用，号隔开;可以详见[mdn](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 * 缓存请求指令
@@ -356,7 +356,7 @@ warning: 113 gw.hackr.jp:8080 "Heuristic expiration" Mon, 16 Aug 2021 07:26:47 G
 |299     | Miscellaneous Warning(持久杂项警告) | 与199类似，只不过指代的是持久化警告 |
 
 
-#### 4 请求首部字段
+#### 四 请求首部字段
 
 1. Accept通知服务器，用户代理可处理的媒体类型及媒体类型相对优先级
 ```
@@ -550,4 +550,61 @@ TE: trailers //表示客户端期望在采用分块传输编码的响应中接�
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36
 ```
 
-#### 5 响应首部字段
+#### 五 响应首部字段
+
+1. Accept-Ranges 服务器使用 HTTP 响应头 Accept-Ranges 标识自身支持范围请求(partial requests)。字段的具体值用于定义范围请求的单位。
+```
+Accept-Ranges: bytes // 范围请求的单位是 bytes （字节）。
+Accept-Ranges: none // 不支持任何范围请求单位，由于其等同于没有返回此头部，因此很少使用。不过一些浏览器，比如IE9，会依据该头部去禁用或者移除下载管理器的暂停按钮。
+```
+
+2. Age 告知客户端源服务器在多久前创建了响应,消息头里包含对象在缓存代理中存贮的时长，以秒为单位;Age的值通常接近于0。表示此对象刚刚从原始服务器获取不久；其他的值则是表示代理服务器当前的系统时间与此应答中的通用头 Date 的值之差。
+
+3. ETag 告知客户端实体标识；服务器会为每份资源分配对应的etag值，当资源更新时也随之更新
+```
+//强etag值，不论实体发生多么细微的变化都会改变其值
+ETag:'usagi-1234'
+
+//弱etag值，只有资源发生了根本改变，产生差异时才会改变etag值
+ETag：W/'usagi-1234'
+```
+
+4. Location 令客户端重定向至指定的URI；几乎所有的浏览器在接收到包含首部字段location的响应后，都会强制性地尝试对已提示的重定向资源的访问；
+
+5. Proxy-Authorization  由代理服务器所要求的认证信息发送给客户的
+
+6. Retry-After 告知客户端应该在多久之后再次发送请求；主要配合状态码503 Service Unavaliable和3xx redirect响应一起使用；字段值可以是具体的时间（Tue, 19 Aug 2021 09:07:44 GMT）或者创建响应后的秒数；
+```
+Retry-After:120 
+```
+7. Server 告知客户端当前服务器上安装的HTTP服务器应用程序信息，除了软件应用名称，还可能有版本号和安装时启用的可选项；
+```
+Server: Apache/2.4.1 (Unix)
+Server: Apache/2.4.1 (Unix) PHP/5.2.5
+```
+8. Vary 可以对缓存进行控制，它决定了对于未来的一个请求头，应该用一个缓存的回复(response)还是向源服务器请求一个新的回复；大部分情况下是用在客户端缓存机制或者是缓存服务器在做缓存操作的时候，会使用到Vary头，会读取响应头中的Vary的内容，进行一些缓存的判断
+```
+// 客户端
+GET /sample.html
+Accept-Language:en-us
+
+// 代理服务器A
+GET /sample.html
+Accept-Language:en-us
+
+// 源服务器返回给代理服务器,告知代理只能低持相同自然语言（Accept-Language）的请求返回缓存
+Vary：Accept-Language 
+
+// 代理服务器A收到源服务器返回的包含vary指定项的响应之后，若再要进行缓存，仅对请求中含有相同vary指定首部字段的请求返回缓存；
+// 客户端即使对相同资源发起请求，但由于vary指定的首部字段不同，因此必须要从源服务器重新获取资源
+```
+还可以是下面的值,对于User-Agent 头部信息，例如你提供给移动端的内容是不同的，可用防止你客户端误使用了用于桌面端的缓存。 并可帮助Google和其他搜索引擎来发现你的移动端版本的页面，同时告知他们不需要Cloaking。
+```
+Vary: Accept-Encoding
+Vary: Accept-Encoding,User-Agent
+Vary: X-Some-Custom-Header,Host
+Vary: *
+```
+9. WWW-Authenticate  服务器对客户端的认证信息
+
+#### 六 实体首部字段
