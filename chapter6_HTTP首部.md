@@ -608,3 +608,55 @@ Vary: *
 9. WWW-Authenticate  服务器对客户端的认证信息
 
 #### 六 实体首部字段
+1. Allow 资源可支持的HTTP方法，若服务器返回状态码 405 Method Not Allowed，则该首部字段亦需要同时返回给客户端。如果 Allow  首部字段的值为空，说明资源不接受使用任何 HTTP 方法的请求。这是可能的，比如服务器需要临时禁止对资源的任何访问。
+
+2. Content-Encodng  告知客户端服务器对实体的主体部分的使用的内容编码方式，内容编码是指在不丢失实体信息的前提下所进行的压缩,主要有以下4种内容编码的方式；
+* gzip
+* compress
+* deflate
+* identity
+
+3. Content-Language  告知客户端实体的主体使用的自然语言
+4. Content-Length  实体主体的大小（单位：字节）
+5. Content-Location  给出与报文主体部分相对应的URI，与location不同，content-location表示的是报文主体返回资源对应的uri
+6. Content-MD5 客户端会对接收的报文主体执行相同的md5算法，然后与首部字段content-md5的字段值比较；
+7. Content-Range 针对范围请求，返回响应时使用该字段告知客户端实体主体的位置范围
+8. Content-Type  实体主体的媒体类型
+9. Expires  告知客户端实体主体过期的日期时间
+10. Last-Modified  资源的最后修改日期时间
+
+
+#### 七 为cookie服务的首部字段
+
+|  首部字段名    |   说明   |    首部类型    |
+|      :-      |    :-    |   :-      |
+|  Set-Cookie  | 开始状态管理所使用的cookie信息 | 响应首部字段   |
+|   Cookie     | 服务器接收到的cookie信息     | 请求首部字段   |
+
+1.Set-Cookie， 响应首部 Set-Cookie 被用来由服务器端向客户端发送 cookie；当服务器准备开始管理客户端的状态时，会事先告知客户端各种信息，如下时set-cookie字段属性
+|    属性    |   说明   |
+|      :-      |    :-    |
+|  NAME=VALUE  | 赋予cookie的名称和其值（必须项） |
+|  expires=DATE   |      |
+|  expires=DATE   |      |
+|  expires=DATE   |      |
+|  expires=DATE   |      |
+|  expires=DATE   |      |
+|  expires=DATE   |      |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
