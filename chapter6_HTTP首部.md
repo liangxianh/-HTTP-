@@ -633,25 +633,40 @@ Vary: *
 |  Set-Cookie  | 开始状态管理所使用的cookie信息 | 响应首部字段   |
 |   Cookie     | 服务器接收到的cookie信息     | 请求首部字段   |
 
-1.Set-Cookie， 响应首部 Set-Cookie 被用来由服务器端向客户端发送 cookie；当服务器准备开始管理客户端的状态时，会事先告知客户端各种信息，如下时set-cookie字段属性
+1. Set-Cookie， 响应首部 Set-Cookie 被用来由服务器端向客户端发送 cookie；当服务器准备开始管理客户端的状态时，会事先告知客户端各种信息，如下时set-cookie字段属性
+
 |    属性    |   说明   |
 |      :-      |    :-    |
 |  NAME=VALUE  | 赋予cookie的名称和其值（必须项） |
-|  expires=DATE   |      |
-|  expires=DATE   |      |
-|  expires=DATE   |      |
-|  expires=DATE   |      |
-|  expires=DATE   |      |
-|  expires=DATE   |      |
+| expires=DATE | cookie的有效期（若不明确指明则默认为浏览器关闭前为止）  |
+|Max-Age=NUMBER｜在cookie失效之前需要经过的秒数。秒数为0或-1将会使cookie直接过期。一些老的浏览器(ie6/ie7和ie8)不支持这个属性。对于其他浏览器来说，假如二者(指 Expires 和Max-Age)均存在,那么Max-Age优先级更高|
+| path=PATH    | 将服务器上的文件目录作为cookie的适用对象（若不指定则默认为文档所在的文件目录）  |
+| domain=域名  |  作为cookie适用对象的域名（不指定默认为创建cookie的服务器域名） |
+| secure     | 仅在HTTPS安全通信时才会发送cookie     |
+| httponly   | 加以限制，是cookie不能被js脚本访问;设置了 HttpOnly 属性的 cookie 不能使用 JavaScript 经由  Document.cookie 属性、XMLHttpRequest 和  Request APIs 进行访问，以**防范跨站脚本攻击**（XSS (en-US)） |
 
+```
+set-cookie: uuid_tt_dd=10_9892166660-1629444067412-283315; Expires=Thu, 01 Jan 2025 00:00:00 GMT; Path=/; Domain=.csdn.net;
+```
 
+2. Cookie,会告知服务器，当客户想获得http状态管理支持时，就会在请求中包含从服务器接收到的cookie
 
+#### 八 其他首部字段
 
+http首部字段时可以自行扩展的，所以在web服务器和浏览器的应用上，会出现各种非标准的首部字段；
 
+1. X-Frame-Options：属于http响应首部，用于控制网站内容在其他web网站的frame标签内的显示问题，其主要目的是**防止点击劫持（clickjacking）攻击**
+```
+// 有两个值，且仅部分浏览器支持（有兼容性）
+X-Frame-Options：DENY // 拒绝
+X-Frame-Options：SAMEORIGIN  //仅同源域名下的页面匹配时许可，如当指定http://hackr.js/sample.html页面为SAMEORIGIN时，hackr.js上所有页面的frame都被允许可加载该页面，而example.com等其他域名的页面就不可以
+```
 
+2. X-XSS-Protection
 
+3. DNT
 
-
+4. P3P
 
 
 
