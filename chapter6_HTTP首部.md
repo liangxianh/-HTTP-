@@ -639,7 +639,7 @@ Vary: *
 |      :-      |    :-    |
 |  NAME=VALUE  | 赋予cookie的名称和其值（必须项） |
 | expires=DATE | cookie的有效期（若不明确指明则默认为浏览器关闭前为止）  |
-|Max-Age=NUMBER｜在cookie失效之前需要经过的秒数。秒数为0或-1将会使cookie直接过期。一些老的浏览器(ie6/ie7和ie8)不支持这个属性。对于其他浏览器来说，假如二者(指 Expires 和Max-Age)均存在,那么Max-Age优先级更高|
+| Max-Age=NUMBER | 在cookie失效之前需要经过的秒数。秒数为0或-1将会使cookie直接过期。一些老的浏览器(ie6/ie7和ie8)不支持这个属性。对于其他浏览器来说，假如二者(指 Expires 和Max-Age)均存在,那么Max-Age优先级更高|
 | path=PATH    | 将服务器上的文件目录作为cookie的适用对象（若不指定则默认为文档所在的文件目录）  |
 | domain=域名  |  作为cookie适用对象的域名（不指定默认为创建cookie的服务器域名） |
 | secure     | 仅在HTTPS安全通信时才会发送cookie     |
@@ -662,11 +662,24 @@ X-Frame-Options：DENY // 拒绝
 X-Frame-Options：SAMEORIGIN  //仅同源域名下的页面匹配时许可，如当指定http://hackr.js/sample.html页面为SAMEORIGIN时，hackr.js上所有页面的frame都被允许可加载该页面，而example.com等其他域名的页面就不可以
 ```
 
-2. X-XSS-Protection
+2. X-XSS-Protection：属于http响应首部，针对跨站脚本攻击的一种对策，用户控制浏览器XSS防护机制的开关
+```
+X-XSS-Protection：0 //将xss过滤设置成无效状态
+X-XSS-Protection：1 //将xss过滤设置成有效状态
+```
 
-3. DNT
+3. DNT:属于http请求首部，DNT（DO NOT TRACK的简称）意为拒绝个人信息被手机，表示拒绝被精准广告追踪的一种方法，
+```
+DNT：0 //同意被追踪
+DNT：1 //拒绝被追踪
+```
 
-4. P3P
+4. P3P：属于http响应首部，利用P3P(the platform for provacy preferences,在线隐私偏好平台）技术，可以让web网站上的个人隐私变成一种仅供程序可理解的形式，以达到保护用户隐私的目的；要进行P3P的设定，需进行如下操作：
+* 创建P3P隐私
+* 创建P3P隐私对照文件后，保存命名在/w3c/p3p.xml
+* 从P3P隐私中新建compact policies后，输出到http响应中
+
+注意：协议总对X-开头的做法表示建议停止，但是已经在用的X-前缀，不应该要求其变更；
 
 
 
