@@ -95,9 +95,27 @@ digest存在密码被窃听的保护机制，但是并不存在防止用户伪�
 
 5. FormBase认证（基于表单认证）
 该方法不是在http协议中定义的；客户端会向服务器上的web应用程序发送登录信息（credential），按登录信息的验证结果认证；现在认证多半为基于表单的验证；但是没有统一的标准规范；
+由于使用上的便利性及安全性问题，http协议标准提供的basic认证和digest认证几乎不怎么使用，而ssl客户端认证虽然具有较高的安全性，但是因导入及费用问题还尚未普及；
 
 > session管理和cookie应用
-一般会使用cookie来管理session（会话）
+一般会使用cookie来管理session（会话），1以弥补http协议中不存在的状态管理功能（之前已认证成功过的用户无法通过协议层面保存下来）；
+```
+客户端                                                         服务器
+    1 ----> 发送已登陆的信息（用户id，密码）    ---->
+            
+     <----- 发送包含session id的cookie    <----  2
+            向用户发放sessionid 记录认证状态
+            set-cookie: JSESSIONID=94f18be8c47e4d329...
+            set-cookie: JSESSIONID=94f18be8c47e4d329b6...; Path=/..; HttpOnly; SameSite=lax
+            
+    3 ----> 发送包含sessionid的cookie    ---->  
+            通过验证sessionid判定对方是真实用户
+            cookie: JSESSIONID=794f18be8c47e4d329...; experim...
+```
+> 步骤
+* 步骤一：client端将id和密码放入报文实体以post方式发送给服务端，
+* 步骤二：服务器发送用以识别用户的sessionid，验证客户端发送过来的信息，把用户的认证状态和sessionid绑定后记录在服务端；sessionid被盗的话，对方就可以伪装成你的身份进行恶意操作了；为了防止跨站脚本攻击（xss）造成的损失，见识现在cookie内加上httponly属性
+* 步骤三：客户端接收到信息后会将其作为cookie保存在本地；下次向服务器发送请求时，浏览器会自动发送cookie；
 
 
 
