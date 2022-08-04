@@ -115,9 +115,21 @@ Sec-WebSocket-Protocol: chat,superchat
 成功建立连接之后，通信时将不在使用HTTP的数据帧，而时采用websocket独立的数据帧；
 
 > websocket api
+<b>当你用 WebSocket API 以及其他大部分实现 WebSockets 的库去建立 WebSocket 连接时，基本上都不用操心升级的过程，因为这些 API 已经实现了这一步</b>。比如，用如下 API 打开一个 WebSocket 连接：
+```
+webSocket = new WebSocket("ws://destination.server.ext", "optionalProtocol");
+WebSocket() 构造函数已经自动完成了发送初始 HTTP/1.1 请求，处理握手及升级过程。
+```
+你也可以用 "wss://" 地址格式来打开安全的 WebSocket 连接。
+
+<b>如果想要自己重头实现 WebSocket 连接，就必须要处理握手和升级过程</b>。在创建初始 HTTP/1.1 会话之后你需要发送另一个 HTTP 标准请求，但在 headers 中要带上Upgrade (en-US) and Connection，也就是：
+```
+Connection: Upgrade
+Upgrade: websocket
+```
 
 详见：[serve-websockey api](https://www.npmjs.com/package/koa-websocket)
-
+```
 websocket---一个同事开发的zip包上传解析记录实时展示的实例
 web端利用new Websocket(api url接口全路径地址) 
 server端接收请求 ping返回pong等保持心跳
@@ -127,6 +139,11 @@ server init
 服务端向web端发送消息
 web端关注信息内容 可能是pong  init  data  close等
 比如web端接收到的是data数据（比如是文件解析记录）, 将数据实时展示到页面列表里面
+```
+一个很厉害的同事对其看法http2和websocket
+http2 我没记错是游览器会默认发起，支持的服务器会自动支持，不需要特别关注，除非有特别需要极致优化的情况下才会关注。
+websocket 我现在用的例子一般是展示处理过程，比如你平常用的 ci 发布的时候那个很长的 log 就会用 websocket，大部分情况下其实轮询会比 websocket 好，所以用起来还是比较少的。
+
 参考：
 
 1. [web-websocket api](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket)
@@ -137,6 +154,33 @@ web端关注信息内容 可能是pong  init  data  close等
 
 
 ### 4 期待已久的HTTP2.0
+HTTP/1.1 链接需要请求以正确的顺序发送，理论上可以用一些并行的链接（尤其是 5 到 8 个），带来的成本和复杂性堪忧。比如，HTTP 管线化（pipelining）就成为了 Web 开发的负担。
+
+在 2010 年到 2015 年，谷歌通过实践了一个实验性的 SPDY 协议，证明了一个在客户端和服务器端交换数据的另类方式。其收集了浏览器和服务器端的开发者的焦点问题。明确了响应数量的增加和解决复杂的数据传输，SPDY 成为了 HTTP/2 协议的基础。
+
+HTTP/2 在 HTTP/1.1 有几处基本的不同：
+
+1. HTTP/2 是二进制协议而不是文本协议。不再可读，也不可无障碍的手动创建，改善的优化技术现在可被实施。
+2. 这是一个复用协议。并行的请求能在同一个链接中处理，移除了 HTTP/1.x 中顺序和阻塞的约束。
+3. 压缩了 headers。因为 headers 在一系列请求中常常是相似的，其移除了重复和传输重复数据的成本。
+4. 其允许服务器在客户端缓存中填充数据，通过一个叫服务器推送的机制来提前请求。
+
+在 2015 年 5 月正式标准化后，HTTP/2 取得了极大的成功，在 2016 年 7 月前，8.7% 的站点已经在使用它，代表超过 68% 的请求[2] 。高流量的站点最迅速的普及，在数据传输上节省了可观的成本和支出。
+
+
+### 5 Web服务器管理文件的WebDAV 
+WebDAV (Web Distributed Authoring and Versioning) 是一种允许 web 开发者使用客户端远程更新内容的 HTTP 扩展。
+
+WebDAV 很少单独使用，其通常与以下两个扩展一起使用：CalDAV 和 CardDAV (en-US)。
+
+WebDAV 允许客户端执行以下操作
+
+1. 增加、删除和查询网页元数据（例如：作者、创建日期） (http/1.1 的put和delete方法就可以对web服务器上的文件进行创建和删除)
+2. 将媒体类型的页面链接到相关页面
+3. 创建文档集和检索层次目录
+4. 复制和移动网页
+5. 锁定文档以免被多人编辑
+
 
 参考文档：
 
