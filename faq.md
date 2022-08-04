@@ -35,7 +35,9 @@ Chrome浏览器最多允许对同一个域名Host建立6个TCP连接，不同的
 
 
 
-> 建立多个tcp连接的原理基于域名分片,利用域名分片来解决http1.x的不能并行处理资源的问题；
+> 建立多个tcp连接的原理是什么？
+基于域名分片,利用域名分片来解决http1.x的不能并行处理资源的问题；
+
 [域名分片概述](https://developer.mozilla.org/zh-CN/docs/Glossary/Domain_sharding)
 
 
