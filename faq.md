@@ -29,11 +29,14 @@ Chrome浏览器最多允许对同一个域名Host建立6个TCP连接，不同的
 
 [各个浏览器host建立tcp数量限制参考](https://cloud.tencent.com/developer/article/1683127)
 
+对于同一个协议、域名、端口，浏览器允许同时打开个 TCP 连接，一般上限为 6 个。
+同一个 TCP 连接允许发起多次 HTTP 请求，但必须等待前一个请求的首个字节响应到达客户端。
+由于队首阻塞问题，不允许客户端同时发送队列中所有请求，这个问题在 HTTP/2.0 得已解决。
 
 
 
-
-
+> 建立多个tcp连接的原理基于域名分片,利用域名分片来解决http1.x的不能并行处理资源的问题；
+[域名分片概述](https://developer.mozilla.org/zh-CN/docs/Glossary/Domain_sharding)
 
 
 
