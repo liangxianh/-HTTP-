@@ -43,6 +43,18 @@ Chrome浏览器最多允许对同一个域名Host建立6个TCP连接，不同的
 
 
 
+> JS实时通信三把斧
+
+
+1. websocket: WebSocket协议是一个独立的基于TCP的协议。 它与HTTP唯一的关系是它的握手是由HTTP服务器解释为一个Upgrade请求
+2 socket.io: 将会使用特性检测的方式来决定以websocket/ajax长轮询/flash等方式建立连接
+3. EventSource: eventsource其实是单向通信，而websocket是双向通信。在股票行情、新闻推送的这种只需要服务器发送消息给客户端场景中，使用SSE更加合适, 一个客户端去从服务器端订阅一条“流”，之后服务端可以发送消息给客户端直到服务端或者客户端关闭该“流”，所以eventsource也叫作"server-sent-event"
+
+详细介绍详见[传送门](https://github.com/liangxianh/nodejs-rtc-demo)
+[websocket](https://blog.5udou.cn/#/blog/detail/JSShi-Shi-Tong-Xin-San-Ba-Fu-Xi-Lie-Zhi-Yi-websocket62)
+[socket.io](https://blog.5udou.cn/#/blog/detail/JSShi-Shi-Tong-Xin-San-Ba-Fu-Xi-Lie-Zhi-Er-socketio40)
+[eventsource](https://www.jianshu.com/p/3d7b0bbf435a)
+
 
 
 
